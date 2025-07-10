@@ -1,11 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import dotenv from "dotenv";
 import express from "express";
-import { registerCreateModelItem } from "./tools/create_model_item";
-import { registerDeleteModelItem } from "./tools/delete_model_item";
-import { registerReadModelItem } from "./tools/read_model_item";
 import { registerSearchModelData } from "./tools/search_model_data";
-import { registerUpdateModelItem } from "./tools/update_model_item";
 
 import { registerPrompts } from "./prompts/prompts";
 import { setupMessageEndpoint, setupSSEEndpoint } from "./transports";
@@ -18,10 +14,11 @@ const server = new McpServer({
 });
 
 // Register tools
-registerCreateModelItem(server);
-registerReadModelItem(server);
-registerUpdateModelItem(server);
-registerDeleteModelItem(server);
+
+// registerCreateModelItem(server);
+// registerReadModelItem(server);
+// registerUpdateModelItem(server);
+// registerDeleteModelItem(server);
 
 registerSearchModelData(server);
 

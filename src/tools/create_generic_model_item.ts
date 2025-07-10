@@ -1,24 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
 import { ModelsHelper } from "../resources/models_helper";
 
 
-export function registerCreateModelItem(server: McpServer) {
+export async function registerGenericCreateModelItem(server: McpServer, model: string) {
+  // Create dynamic schema based on model fields
+  const dynamicSchema = await ModelsHelper.createDynamicSchema(model);
   server.tool(
-    "create_model_item",
-    "Create a new model item",
-    {
-      model: z.string().refine((val) => val.length > 3, {
-        message: "Invalid model name. Please provide longer than 3 letter name.",
-      }).describe("the name of the model"),
-      data: z.record(z.any()).describe("the data object containing the fields to create")
-    },
+    "create_" + model + "_item",
+    "Create a new " + model + " item",
+    dynamicSchema._output,
     async ({ model, data }) => {
       console.log(`Received create_model_item call for model ${model}.`);
-
-      // Create dynamic schema based on model fields
-      const dynamicSchema = await ModelsHelper.createDynamicSchema(model);
-
       // Validate data against dynamic schema
       const validatedData = dynamicSchema.parse(data);
 
