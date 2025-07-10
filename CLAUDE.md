@@ -35,18 +35,18 @@ The project follows a modular architecture with separated concerns:
 ### Directory Structure
 ```
 src/
-├── modules/
-│   ├── tools/                      # Individual tool implementations
-│   │   ├── search_model_data.ts    # Search/pagination/filtering
-│   │   ├── read_model_item.ts      # Read single item by ID
-│   │   ├── create_model_item.ts    # Create new item
-│   │   ├── update_model_item.ts    # Update existing item
-│   │   └── delete_model_item.ts    # Delete item by ID
-│   ├── tools.ts                    # Main tools registration
-│   ├── prompts.ts                  # MCP prompt definitions
-│   └── transports.ts               # SSE transport layer
-├── server.ts                       # Main entry point
-└── types/                          # TypeScript definitions
+├── tools/                          # Individual tool implementations
+│   ├── search_model_data.ts        # Search/pagination/filtering
+│   ├── read_model_item.ts          # Read single item by ID
+│   ├── create_model_item.ts        # Create new item
+│   ├── update_model_item.ts        # Update existing item
+│   └── delete_model_item.ts        # Delete item by ID
+├── prompts/                        # MCP prompt definitions
+│   └── prompts.ts
+├── resources/                      # MCP resources
+├── workflow/                       # Workflow definitions
+├── server.ts                       # Main entry point with tools registration
+└── transports.ts                   # SSE transport layer
 ```
 
 ### Key Components
@@ -160,9 +160,9 @@ npx @modelcontextprotocol/inspector ./build/server.js
 ## Code Maintenance Guidelines
 
 ### Adding New Tools
-1. Create a new file in `src/modules/tools/`
+1. Create a new file in `src/tools/`
 2. Export a registration function that takes `McpServer` parameter
-3. Import and call the registration function in `src/modules/tools.ts`
+3. Import and call the registration function in `src/server.ts`
 4. Follow the existing pattern for Zod validation and error handling
 
 ### Modifying Existing Tools
