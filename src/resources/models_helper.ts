@@ -7,14 +7,14 @@ export class ModelsHelper {
     const response = await fetch(url + new URLSearchParams({
       psize: "0", // 0 will return all items - canceling paging
       pnum: "1",
-      sortBy: JSON.stringify([{ sort: "sortNum" }]),
+      sortBy: JSON.stringify([{ sort: '"orderNum"' }]),
       searchBy: JSON.stringify([{
         id: "isEditable",
         type: 'text',
         operator: '=',
         value: true
       }, {
-        id: "isActive",
+        id: "model_fields.isActive",
         type: 'text',
         operator: '=',
         value: true
@@ -34,11 +34,11 @@ export class ModelsHelper {
   }
   static async getModels(): Promise<any> {
     console.log(`getModels activated.`);
-    const url = `http://localhost:3101/api/tables/models/?`;
+    const url = `http://localhost:3101/api/tables/model/?`;
     const response = await fetch(url + new URLSearchParams({
       psize: "0", // 0 will return all items - canceling paging
       pnum: "1",
-      sortBy: JSON.stringify([{ sort: "sortNum" }]),
+      sortBy: JSON.stringify([{ sort: "id" }]),
       searchBy: JSON.stringify([{
         id: "isActive",
         type: 'text',
@@ -74,7 +74,7 @@ export class ModelsHelper {
     }
   }
 
-  async static createDynamicSchema(model: string) {
+  static async createDynamicSchema(model: string): Promise<Record<string, z.ZodTypeAny>> {
     try {
       const modelFields = await ModelsHelper.getModelField(model);
       const schemaFields: Record<string, z.ZodTypeAny> = {};
@@ -103,10 +103,12 @@ export class ModelsHelper {
         });
       }
 
-      return z.object(schemaFields);
+      return schemaFields;
     } catch (error) {
       console.warn(`Failed to create dynamic schema for ${model}, falling back to generic schema:`, error);
-      return z.record(z.any());
+      // Return a generic schema object for fallback
+      return { data: z.any().describe("Generic data field") };
     }
 
   }
+}

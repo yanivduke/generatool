@@ -38,7 +38,7 @@ src/
 ├── tools/                          # Individual tool implementations
 │   ├── search_model_data.ts        # Search/pagination/filtering
 │   ├── read_model_item.ts          # Read single item by ID
-│   ├── create_model_item.ts        # Create new item
+│   ├── create_generic_model_item.ts# Create new generic item
 │   ├── update_model_item.ts        # Update existing item
 │   └── delete_model_item.ts        # Delete item by ID
 ├── prompts/                        # MCP prompt definitions

@@ -1,18 +1,24 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { z } from "zod";
 import { ModelsHelper } from "../resources/models_helper";
 
 
-export async function registerGenericCreateModelItem(server: McpServer, model: string) {
+export async function registerGenericCreateModelItem(server: McpServer, model: string, model_id: string) {
   // Create dynamic schema based on model fields
-  const dynamicSchema = await ModelsHelper.createDynamicSchema(model);
+  const dynamicSchemaShape = await ModelsHelper.createDynamicSchema(model_id);
+
+  // Create a ZodObject from the schema shape for validation
+  const dynamicSchema = z.object(dynamicSchemaShape);
+
   server.tool(
     "create_" + model + "_item",
     "Create a new " + model + " item",
-    dynamicSchema._output,
-    async ({ model, data }) => {
-      console.log(`Received create_model_item call for model ${model}.`);
+    dynamicSchemaShape,
+    async (args: any) => {
+      console.log(`Received create_${model}_item call with args:`, args);
+
       // Validate data against dynamic schema
-      const validatedData = dynamicSchema.parse(data);
+      const validatedData = dynamicSchema.parse(args);
 
       const url = `http://localhost:3101/api/tables/${model}/`;
       const response = await fetch(url, {
@@ -27,7 +33,7 @@ export async function registerGenericCreateModelItem(server: McpServer, model: s
         throw new Error(`CRUD API error: ${response.statusText}`);
       }
 
-      const result = await response.json();
+      const result = (await response.json()).data;
       console.log(`Operation successful: Result = ${JSON.stringify(result)}`);
 
       return {
