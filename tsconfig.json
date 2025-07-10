@@ -23,7 +23,7 @@
     "dist"
   ],
   "ts-node": {
-    "esm": false,
+    "esm": true,
     "experimentalSpecifierResolution": "node"
   }
 }

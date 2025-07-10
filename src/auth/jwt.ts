@@ -1,6 +1,9 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
+import { createRequire } from 'module';
 import { z } from 'zod';
+
+const require = createRequire(import.meta.url);
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '7d';
