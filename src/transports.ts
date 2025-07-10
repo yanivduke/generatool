@@ -1,11 +1,11 @@
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { Request, Response } from "express";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { NextFunction, Request, Response } from "express";
 
 const transports: { [sessionId: string]: SSEServerTransport } = {};
 
-export function setupSSEEndpoint(app: any, server: McpServer) {
-  app.get("/sse", async (_: Request, res: Response) => {
+export function setupSSEEndpoint(app: any, server: McpServer, authMiddleware?: (req: Request, res: Response, next: NextFunction) => void) {
+  app.get("/sse", authMiddleware || ((req: Request, res: Response, next: NextFunction) => next()), async (_: Request, res: Response) => {
     const transport = new SSEServerTransport("/messages", res);
     transports[transport.sessionId] = transport;
 
@@ -25,8 +25,8 @@ export function setupSSEEndpoint(app: any, server: McpServer) {
   });
 }
 
-export function setupMessageEndpoint(app: any) {
-  app.post("/messages", async (req: Request, res: Response) => {
+export function setupMessageEndpoint(app: any, authMiddleware?: (req: Request, res: Response, next: NextFunction) => void) {
+  app.post("/messages", authMiddleware || ((req: Request, res: Response, next: NextFunction) => next()), async (req: Request, res: Response) => {
     const sessionId = req.query.sessionId as string;
     const transport = transports[sessionId] ?? Object.values(transports)[0];
 
