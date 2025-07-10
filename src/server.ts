@@ -7,6 +7,7 @@ import { registerReadModelItem } from "./tools/read_model_item";
 import { registerSearchModelData } from "./tools/search_model_data";
 import { registerUpdateModelItem } from "./tools/update_model_item";
 
+import { registerPrompts } from "./prompts/prompts";
 import { setupMessageEndpoint, setupSSEEndpoint } from "./transports";
 
 dotenv.config();
@@ -24,7 +25,7 @@ registerDeleteModelItem(server);
 
 registerSearchModelData(server);
 
-// registerPrompts(server);
+registerPrompts(server);
 
 const app = express();
 
