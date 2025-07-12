@@ -15,7 +15,15 @@
       "name": "CRUD API",
       "url": "http://localhost:4000/sse",
       "disabled": false,
-      "alwaysAllow": []
+      "alwaysAllow": [
+        "search_model_data"
+      ]
+    },
+    "Figma_MCP_Server": {
+      "type": "sse",
+      "name": "Figma MCP Server",
+      "url": "http://localhost:3333/sse",
+      "disabled": false
     }
   }
 }
